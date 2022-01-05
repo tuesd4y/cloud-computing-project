@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: routing-service-demo
+  namespace: routing-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      routing-service: web
+  template:
+    metadata:
+      labels:
+        routing-service: web
+    spec:
+      containers:
+      - name: routing-service-car-berlin
+        image: tuesd4y/osrm-backend-eks:latest
+        env: 
+        - name: OSRM_DATA_LABEL
+          value: "berlin-new"
+        - name: OSRM_MODE
+          value: "LOAD"
+        - name: OSRM_S3_BUCKET
+          value: "s3://triply-routing-data"
+          # todo-Chris -> we should use secrets for this instead of storing them in plain text, as outlined in https://kubernetes.io/docs/concepts/configuration/secret/#using-secrets-as-environment-variables
+        - name: OSRM_AWS_ACCESS_KEY_ID
+          value: "AKIAY6JW2ISLQO7FBYOE"
+        - name: OSRM_AWS_SECRET_ACCESS_KEY
+          value: "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"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: routing-service-entrypoint
+  namespace: routing-service
+spec:
+  type: ClusterIP
+  selector:
+    routing-service: web
+  ports:
+  - port: 5000
+    protocol: TCP
+    targetPort: 5000
