@@ -25,14 +25,13 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.security:spring-security-test")
 
-	implementation(platform("com.amazonaws:aws-java-sdk-bom:1.11.1000"))
-	implementation("com.amazonaws:aws-java-sdk-eks")
+	implementation("io.kubernetes:client-java:14.0.0")
 }
 
 tasks.withType<KotlinCompile> {
 	kotlinOptions {
 		freeCompilerArgs = listOf("-Xjsr305=strict")
-		jvmTarget = "11"
+		jvmTarget = "1.8"
 	}
 }
 

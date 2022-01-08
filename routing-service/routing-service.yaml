@@ -12,6 +12,7 @@ spec:
   template:
     metadata:
       labels:
+        app: routing-server
         routing-config: berlin-new-car
 
     spec:
@@ -37,6 +38,7 @@ metadata:
   name: routing-service-entrypoint
   namespace: routing-service
   labels:
+    app: routing-server
     routing-config: berlin-new-car
   annotations: 
     source-url: "http://download.geofabrik.de/europe/germany/berlin-latest.osm.pbf"
