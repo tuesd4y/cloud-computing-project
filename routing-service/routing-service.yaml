@@ -3,15 +3,17 @@ kind: Deployment
 metadata:
   name: routing-service-demo
   namespace: routing-service
+
 spec:
   replicas: 1
   selector:
     matchLabels:
-      routing-service: web
+      routing-config: berlin-new-car
   template:
     metadata:
       labels:
-        routing-service: web
+        routing-config: berlin-new-car
+
     spec:
       containers:
       - name: routing-service-car-berlin
@@ -34,10 +36,17 @@ kind: Service
 metadata:
   name: routing-service-entrypoint
   namespace: routing-service
+  labels:
+    routing-config: berlin-new-car
+  annotations: 
+    source-url: "http://download.geofabrik.de/europe/germany/berlin-latest.osm.pbf"
+    region: berlin-new
+    mode: car
+    time: "2022-01-08"
 spec:
   type: ClusterIP
   selector:
-    routing-service: web
+    routing-config: berlin-new-car
   ports:
   - port: 5000
     protocol: TCP
