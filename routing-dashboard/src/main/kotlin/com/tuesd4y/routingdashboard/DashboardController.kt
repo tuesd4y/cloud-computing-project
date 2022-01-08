@@ -22,7 +22,10 @@ class DashboardController(private val routingService: KubernetesApiService) {
 
     @PostMapping("processingFinished")
     fun processingFinished(@RequestBody processingFinishedInformation: ProcessingFinishedInformation): ResponseEntity<Any> {
-        routingService.startServer(processingFinishedInformation)
-        return ResponseEntity.accepted().build()
+        val (deployment, service) = routingService.startServer(processingFinishedInformation)
+        return ResponseEntity.ok(mapOf(
+            "deploymentMetadata" to deployment.metadata!!,
+            "serviceMetadata" to service.metadata!!
+        ))
     }
 }
