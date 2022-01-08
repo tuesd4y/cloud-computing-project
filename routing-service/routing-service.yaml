@@ -28,9 +28,9 @@ spec:
           value: "s3://triply-routing-data"
           # todo-Chris -> we should use secrets for this instead of storing them in plain text, as outlined in https://kubernetes.io/docs/concepts/configuration/secret/#using-secrets-as-environment-variables
         - name: OSRM_AWS_ACCESS_KEY_ID
-          value: "AKIAY6JW2ISLQO7FBYOE"
+          value: "ACCESS-KEY"
         - name: OSRM_AWS_SECRET_ACCESS_KEY
-          value: "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"
+          value: "ACCESS/SECRET"
 ---
 apiVersion: v1
 kind: Service
