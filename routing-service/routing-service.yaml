@@ -1,24 +1,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: routing-service-demo
+  name: routing-service-berlin-car
   namespace: routing-service
 
 spec:
   replicas: 1
   selector:
     matchLabels:
-      routing-config: berlin-new-car
+      routing-config: berlin-car
   template:
     metadata:
       labels:
         app: routing-server
-        routing-config: berlin-new-car
+        routing-config: berlin-car
 
     spec:
       containers:
-      - name: routing-service-car-berlin
+      - name: routing-service-berlin-car
         image: tuesd4y/osrm-backend-eks:latest
+        resources:
+          requests:
+            memory: "500Mi"
+            cpu: "500m"
         env: 
         - name: OSRM_DATA_LABEL
           value: "berlin-new"
@@ -35,11 +39,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: routing-service-entrypoint
+  name: routing-service-berlin-car-entrypoint
   namespace: routing-service
   labels:
     app: routing-server
-    routing-config: berlin-new-car
+    routing-config: berlin-car
   annotations: 
     source-url: "http://download.geofabrik.de/europe/germany/berlin-latest.osm.pbf"
     region: berlin-new
@@ -48,7 +52,7 @@ metadata:
 spec:
   type: ClusterIP
   selector:
-    routing-config: berlin-new-car
+    routing-config: berlin-car
   ports:
   - port: 5000
     protocol: TCP
