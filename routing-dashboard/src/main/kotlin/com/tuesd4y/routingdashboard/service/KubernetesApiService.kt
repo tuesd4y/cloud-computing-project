@@ -5,9 +5,11 @@ import com.tuesd4y.routingdashboard.entity.ProcessingFinishedInformation
 import com.tuesd4y.routingdashboard.entity.RoutingService
 import io.kubernetes.client.openapi.ApiException
 import io.kubernetes.client.openapi.apis.AppsV1Api
+import io.kubernetes.client.openapi.apis.AutoscalingV2beta2Api
 import io.kubernetes.client.openapi.apis.CoreV1Api
 import io.kubernetes.client.openapi.models.V1Deployment
 import io.kubernetes.client.openapi.models.V1Service
+import io.kubernetes.client.openapi.models.V2beta2HorizontalPodAutoscaler
 import io.kubernetes.client.util.Yaml
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
@@ -16,6 +18,7 @@ import java.time.LocalDateTime
 class KubernetesApiService(
     private val coreV1Api: CoreV1Api,
     private val appsV1Api: AppsV1Api,
+    private val autoscalingV2beta2Api: AutoscalingV2beta2Api,
     private val awsCredentials: AwsCredentials
 ) {
     companion object {
@@ -49,7 +52,7 @@ class KubernetesApiService(
         }
     }
 
-    fun startServer(processingFinishedInformation: ProcessingFinishedInformation): Pair<V1Deployment, V1Service> {
+    fun startServer(processingFinishedInformation: ProcessingFinishedInformation): Triple<V1Deployment, V1Service, V2beta2HorizontalPodAutoscaler> {
         val label = processingFinishedInformation.label
         val region = label.replace("-${processingFinishedInformation.mode}", "")
         val deploymentString = DeploymentTemplate.buildRealYaml(
@@ -69,12 +72,16 @@ class KubernetesApiService(
         )
         val service = Yaml.load(serviceString) as V1Service
 
+        val autoscalerString = AutoscalerTemplate.buildRealYaml(label)
+        val autoscaler = Yaml.load(autoscalerString) as V2beta2HorizontalPodAutoscaler
+
         try {
             val deploymentResponse = appsV1Api.createNamespacedDeployment(NAMESPACE, deployment, null, null, null)
             val serviceResponse = coreV1Api.createNamespacedService(NAMESPACE, service, null, null, null)
-            return deploymentResponse to serviceResponse
+            val autoscalingResponse =
+                autoscalingV2beta2Api.createNamespacedHorizontalPodAutoscaler(NAMESPACE, autoscaler, null, null, null)
+            return Triple(deploymentResponse, serviceResponse, autoscalingResponse)
         } catch (ex: ApiException) {
-
             System.err.println("Received API error response body: ${ex.responseBody}")
             throw ex
         }

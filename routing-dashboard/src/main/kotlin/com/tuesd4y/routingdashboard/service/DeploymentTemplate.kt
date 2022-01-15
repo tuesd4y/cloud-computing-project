@@ -39,6 +39,10 @@ spec:
       containers:
       - name: routing-service-{{identifier}}
         image: tuesd4y/osrm-backend-eks:latest
+        resources:
+          requests:
+            memory: "500Mi"
+            cpu: "200m"
         env: 
         - name: OSRM_DATA_LABEL
           value: "{{identifier}}"
