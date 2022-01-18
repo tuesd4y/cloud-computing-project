@@ -28,7 +28,7 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
             .antMatchers(HttpMethod.OPTIONS).permitAll()
             .anyRequest().authenticated()
             .and()
-            .formLogin(withDefaults())
+			.httpBasic(withDefaults())
     }
 
     @Bean

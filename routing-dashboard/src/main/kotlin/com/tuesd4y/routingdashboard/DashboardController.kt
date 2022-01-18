@@ -2,6 +2,7 @@ package com.tuesd4y.routingdashboard
 
 import com.tuesd4y.routingdashboard.entity.ProcessingFinishedInformation
 import com.tuesd4y.routingdashboard.entity.RoutingService
+import com.tuesd4y.routingdashboard.entity.StartProcessingInformation
 import com.tuesd4y.routingdashboard.service.KubernetesApiService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -16,8 +17,9 @@ class DashboardController(private val routingService: KubernetesApiService) {
     }
 
     @PostMapping("startProcessing")
-    fun startProcessing() {
-        TODO()
+    fun startProcessing(@RequestBody startProcessingInformation: StartProcessingInformation): ResponseEntity<Any> {
+
+		return ResponseEntity.accepted().build()
     }
 
     @PostMapping("processingFinished")
@@ -28,4 +30,6 @@ class DashboardController(private val routingService: KubernetesApiService) {
             "serviceMetadata" to service.metadata!!
         ))
     }
+
+	//TODO Shutdown / Stop
 }
