@@ -16,9 +16,11 @@ All deployed routing engines shown on a map, such that a user can easily see whi
 
 The pre-processed street network data is stored on AWS S3 and Kubernetes (via Amazon EKS) is used to deploy the routing engines.
 
-_disclaimer: this will beusing at triply - the company where both Sebastian and Chris work_
+_disclaimer: this will be used at triply - the company where both Sebastian and Chris work_
 
 ### Description
+
+In the dashboard, the user can see all currently active routing-areas, their mode and the areas they cover. Via _Add New Region_, the user is prompted to sub-page where a new area and the specific mode can be selected for deployment. Furthermore, we've added the possibility of deleting a specific routing-area by pressing _Delete Selected Region_ after selecting an area.
 
 _We want to futher clarify how the exact steps that happen after a user chooses to deploy a new "area" for routing_
 
