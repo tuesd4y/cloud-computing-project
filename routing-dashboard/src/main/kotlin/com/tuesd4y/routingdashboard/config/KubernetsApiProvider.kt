@@ -16,7 +16,7 @@ import java.io.FileReader
 class KubernetesApiProvider {
 
     init {
-        val client = ClientBuilder.kubeconfig(KubeConfig.loadKubeConfig(FileReader("/Users/dev/.kube/config"))).build()
+        val client = ClientBuilder.defaultClient()
         setDefaultApiClient(client)
     }
     @Bean
