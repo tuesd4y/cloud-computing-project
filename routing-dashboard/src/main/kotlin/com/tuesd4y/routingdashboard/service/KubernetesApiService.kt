@@ -30,6 +30,7 @@ class KubernetesApiService(
         const val SOURCE_KEY = "source-url"
         const val TIME_KEY = "time"
 
+		const val download_server_url = "https://download.geofabrik.de/"
         const val s3bucket = "s3://triply-routing-data"
     }
 
@@ -54,9 +55,11 @@ class KubernetesApiService(
     }
 
     fun startProcessing(startProcessingInformation: StartProcessingInformation) {
-        val region = ""
-        val mode = ""
-        val pbfUrl = ""
+
+
+		val region = startProcessingInformation.region
+        val mode = startProcessingInformation.mode
+        val pbfUrl = download_server_url + startProcessingInformation.pbfLink
         val jobString = "" //JobTemplate.buildRealYaml()
         val job = Yaml.load(jobString) as V1Deployment
     }

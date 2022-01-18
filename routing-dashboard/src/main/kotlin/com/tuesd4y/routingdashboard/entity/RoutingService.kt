@@ -7,4 +7,10 @@ data class RoutingService(
 	val setupTime: String
 ){
 	val shapeUrl : String = sourceUrl.substring(0, sourceUrl.lastIndexOf("-")) + ".kml"
+	val iconClass : String = when (mode) {
+		"car" -> "fa-automobile"
+		"bike" -> "fa-bicycle"
+		"foot" -> "fa-walking"
+		else -> ""
+	}
 }
