@@ -33,5 +33,9 @@ class DashboardController(private val kubernetesService: KubernetesApiService) {
         ))
     }
 
-	//TODO Shutdown / Stop
+    @DeleteMapping("{identifier}")
+    fun stopService(identifier: String): ResponseEntity<String> {
+        kubernetesService.stopServer(identifier)
+        return ResponseEntity.ok().build()
+    }
 }
