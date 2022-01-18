@@ -1,6 +1,6 @@
 #!/bin/sh
 
-VERSION="1.0.1"
+VERSION="1.1.0"
 rm -rf build/libs/*.jar
 ./gradlew bootJar
 

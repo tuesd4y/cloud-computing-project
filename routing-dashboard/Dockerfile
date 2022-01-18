@@ -1,4 +1,4 @@
-FROM openjdk:11
+FROM openjdk:8
 
 LABEL \
   maintainer="Chris Stelzmüller <chris@tuesd4y.com>" \
@@ -13,4 +13,4 @@ ARG JAR_FILE=target/*.jar
 COPY ${JAR_FILE} app.jar
 EXPOSE 8080
 
-ENTRYPOINT ["java","-jar","/app.jar"]
+ENTRYPOINT ["java", "-jar","/app.jar"]

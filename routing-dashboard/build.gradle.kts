@@ -8,8 +8,8 @@ plugins {
 }
 
 group = "com.tuesd4y.routingdashboard"
-version = "1.0.1"
-java.sourceCompatibility = JavaVersion.VERSION_11
+version = "1.1.0"
+java.sourceCompatibility = JavaVersion.VERSION_1_8
 
 repositories {
 	mavenCentral()
@@ -27,6 +27,8 @@ dependencies {
 
 	implementation("io.kubernetes:client-java:14.0.0")
 }
+
+// https://github.com/kubernetes-client/java/issues/365
 
 tasks.withType<KotlinCompile> {
 	kotlinOptions {
