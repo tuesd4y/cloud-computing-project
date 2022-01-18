@@ -66,7 +66,7 @@ object JobTemplate {
                                                 V1EnvVar().name("OSRM_S3_BUCKET").value(s3bucket),
                                                 V1EnvVar().name("OSRM_AWS_ACCESS_KEY_ID").value(accessKeyId),
                                                 V1EnvVar().name("OSRM_AWS_SECRET_ACCESS_KEY").value(secretAccessKey),
-                                                V1EnvVar().name("OSRM_WEBHOOK_URL").value("http://routing-dashboard:8080/processingFinished"),
+                                                V1EnvVar().name("OSRM_WEBHOOK_URL").value("http://routing-dashboard:8080/servers/processingFinished"),
                                                 V1EnvVar().name("OSRM_EXIT_AFTER_UPLOAD").value("1"),
                                             )
                                         )
