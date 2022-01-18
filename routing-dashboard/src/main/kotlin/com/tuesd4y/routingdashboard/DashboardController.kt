@@ -36,7 +36,7 @@ class DashboardController(private val kubernetesService: KubernetesApiService) {
     }
 
     @DeleteMapping("{identifier}")
-    fun stopService(identifier: String): ResponseEntity<String> {
+    fun stopService(@PathVariable("identifier") identifier: String): ResponseEntity<String> {
         println("StopService called with $identifier")
         kubernetesService.stopServer(identifier)
         return ResponseEntity.ok().build()
