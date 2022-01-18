@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "com.tuesd4y.routingdashboard"
-version = "1.1.0"
+version = "1.1.2"
 java.sourceCompatibility = JavaVersion.VERSION_1_8
 
 repositories {
