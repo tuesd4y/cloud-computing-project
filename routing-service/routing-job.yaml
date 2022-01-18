@@ -1,0 +1,38 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: routing-process-maldives-car
+  namespace: routing-service
+spec:
+  template:
+    spec:
+      containers:
+      - name: routing-service-berlin-car
+        image: tuesd4y/osrm-backend-eks:latest
+        resources:
+          requests:
+            memory: "1000Mi"
+            cpu: "500m"
+        env: 
+        - name: OSRM_PBF_URL
+          value: "https://download.geofabrik.de/asia/maldives-latest.osm.pbf"
+        - name: OSRM_GRAPH_PROFILE
+          value: "car"
+        - name: OSRM_DATA_LABEL
+          value: "maledives-car"
+        - name: OSRM_MODE
+          value: "CREATE"
+        - name: OSRM_S3_BUCKET
+          value: "s3://triply-routing-data"
+        - name: OSRM_AWS_ACCESS_KEY_ID
+          value: "KEY"
+        - name: OSRM_AWS_SECRET_ACCESS_KEY
+          value: "SECRET"
+        - name: OSRM_WEBHOOK_URL
+          value: "http://routing-dashboard/processingFinished"
+        - name: OSRM_EXIT_AFTER_UPLOAD
+          value: "1"
+      restartPolicy: Never
+      ttlSecondsAfterFinished: 10
+      completions: 1
+  backoffLimit: 1
