@@ -42,3 +42,20 @@ Each routing-app service can horizontally scale (more pods in one service), such
 ### Deployment Architecture
 
 ![deployment architecture](img/architecture.png)
+
+### Responsibilities
+
+Sebastian Tanzer
+
+- UI for dashboard application
+- Part of backend for dashboard application
+
+Tim Seferagic
+
+- Job for preprocessing routing engines
+
+Christopher Stelzmüller
+
+- Setup scripts for routing engines
+- Deployment configuration for routing engines
+- Backend for deploying services to Kubernetes cluster
