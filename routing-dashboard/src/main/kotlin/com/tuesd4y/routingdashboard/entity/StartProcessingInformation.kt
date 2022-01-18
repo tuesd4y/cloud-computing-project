@@ -1,6 +1,6 @@
 package com.tuesd4y.routingdashboard.entity
 
 data class StartProcessingInformation(
-	val region: String,
+	val htmlLink: String,
 	val mode: String
 )

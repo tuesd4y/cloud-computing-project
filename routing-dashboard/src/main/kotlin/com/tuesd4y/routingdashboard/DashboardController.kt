@@ -9,22 +9,24 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/servers")
-class DashboardController(private val routingService: KubernetesApiService) {
+class DashboardController(private val kubernetesService: KubernetesApiService) {
 
     @GetMapping
     fun getAllServers(): List<RoutingService> {
-        return routingService.getCurrentlyRunningServices()
+        return kubernetesService.getCurrentlyRunningServices()
     }
 
     @PostMapping("startProcessing")
     fun startProcessing(@RequestBody startProcessingInformation: StartProcessingInformation): ResponseEntity<Any> {
+
+        kubernetesService.startProcessing(startProcessingInformation)
 
 		return ResponseEntity.accepted().build()
     }
 
     @PostMapping("processingFinished")
     fun processingFinished(@RequestBody processingFinishedInformation: ProcessingFinishedInformation): ResponseEntity<Any> {
-        val (deployment, service) = routingService.startServer(processingFinishedInformation)
+        val (deployment, service) = kubernetesService.startServer(processingFinishedInformation)
         return ResponseEntity.ok(mapOf(
             "deploymentMetadata" to deployment.metadata!!,
             "serviceMetadata" to service.metadata!!

@@ -3,6 +3,7 @@ package com.tuesd4y.routingdashboard.service
 import com.tuesd4y.routingdashboard.config.AwsCredentials
 import com.tuesd4y.routingdashboard.entity.ProcessingFinishedInformation
 import com.tuesd4y.routingdashboard.entity.RoutingService
+import com.tuesd4y.routingdashboard.entity.StartProcessingInformation
 import io.kubernetes.client.openapi.ApiException
 import io.kubernetes.client.openapi.apis.AppsV1Api
 import io.kubernetes.client.openapi.apis.AutoscalingV2beta2Api
@@ -50,6 +51,14 @@ class KubernetesApiService(
                 null
             }
         }
+    }
+
+    fun startProcessing(startProcessingInformation: StartProcessingInformation) {
+        val region = ""
+        val mode = ""
+        val pbfUrl = ""
+        val jobString = "" //JobTemplate.buildRealYaml()
+        val job = Yaml.load(jobString) as V1Deployment
     }
 
     fun startServer(processingFinishedInformation: ProcessingFinishedInformation): Triple<V1Deployment, V1Service, V2beta2HorizontalPodAutoscaler> {
