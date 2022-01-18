@@ -56,6 +56,24 @@ Tim Seferagic
 
 Christopher Stelzmüller
 
-- Setup scripts for routing engines
-- Deployment configuration for routing engines
-- Backend for deploying services to Kubernetes cluster
+- Docker Container for routing engine (tuesd4y/osrm-backend-eks) - including options for running and preprocessing
+- Kubernetes service for running routing engines
+- Dashboard Backend for interfacing with kubernetes API
+
+## TODO: Insights
+
+- names have to be lowercase!
+- access through user accounts
+- giving AWS accounts access to kubernetes isn't that easy
+
+## TODO Setup instructions
+
+- namespace routing-service
+- AWS credentials in routing-dashboard.yaml
+- configure AWS S3 bucket url in Java code
+- apply routing-dashboard.yaml
+
+## TODO Open questions and next steps
+
+- hide AWS credentials from storage
+- show current scaling and configure mem/cpu
