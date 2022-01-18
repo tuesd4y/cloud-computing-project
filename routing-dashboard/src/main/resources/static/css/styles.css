@@ -1,0 +1,47 @@
+
+#map {
+	width: 100%;
+	height: 100vh;
+	z-index: 999;
+}
+
+#map_modal {
+	width: 100%;
+	height: 81vh;
+	z-index: 999;
+}
+
+#deleteRegion{
+	margin-top: 15px;
+}
+
+.fa-active{
+	margin-right: 5px;
+	margin-left: -13px;
+}
+
+.no-scoll-modal-content{
+	height: 81vh;
+}
+
+#list-all-regions{
+	height: 90%;
+	overflow: scroll;
+}
+
+.list-group > .list-group {
+	display: none;
+	margin-bottom: 0;
+}
+
+.active + .list-group {
+	display: block;
+}
+
+.list-group > .list-group-item {
+	border-radius: 0;
+}
+
+.list-group > .list-group > .list-group-item {
+	padding-left: 2.5rem;
+}

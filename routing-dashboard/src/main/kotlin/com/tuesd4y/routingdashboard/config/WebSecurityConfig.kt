@@ -24,7 +24,7 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
             .and()
             .csrf().disable()
             .authorizeRequests()
-            .antMatchers( "/servers/processingFinished", "/", "/login", "index.html", "/css/**", "/js/**").permitAll()
+            .antMatchers( "/servers/processingFinished", "/", "/login", "index.html", "/css/**", "/js/**", "/img/**").permitAll()
             .antMatchers(HttpMethod.OPTIONS).permitAll()
             .anyRequest().authenticated()
             .and()

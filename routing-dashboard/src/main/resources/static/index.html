@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+	<meta charset="UTF-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+	<meta http-equiv="x-ua-compatible" content="ie=edge"/>
+	<title>Routing Dashboard</title>
+	<!-- icon -->
+	<link rel="icon" href="img/favicon.ico" type="image/x-icon"/>
+	<!-- Font Awesome -->
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css"/>
+	<!-- Google Fonts Roboto -->
+	<link rel="stylesheet"
+		  href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap"/>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<!-- MDB -->
+	<link rel="stylesheet" href="css/mdb.min.css"/>
+	<link rel="stylesheet" href="css/styles.css"/>
+	<link rel="stylesheet" href="css/Toast.min.css"/>
+
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+<!-- Start your project here-->
+<div class="container" style="max-width: 100%;">
+	<div class="row gx-1 ">
+
+		<div class="col-md-6">
+			<div id="map"></div>
+		</div>
+
+		<div class="col-md-6">
+			<div class="row d-flex align-items-center justify-content-center"
+				 style="height: 100%">
+				<div class="col-6 gap-3 mx-auto">
+
+					<h3>Active Regions</h3>
+
+					<div class="list-group active-regions" id="list-tab" role="tablist">
+
+					</div>
+					</br>
+					<div class="d-grid mx-auto">
+						<!-- Button trigger modal -->
+						<button
+								id="openModal"
+								type="button"
+								class="btn btn-primary"
+								data-mdb-toggle="modal"
+								data-mdb-target="#staticBackdrop"
+						>
+							Add New Region
+						</button>
+						<br/>
+						<button
+								id="deleteRegion"
+								type="button"
+								class="btn btn-primary"
+						>
+							Delete Selected Region
+						</button>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	<!-- Modal -->
+	<div
+			class="modal fade"
+			id="staticBackdrop"
+			data-mdb-backdrop="static"
+			data-mdb-keyboard="false"
+			tabindex="-1"
+			aria-labelledby="staticBackdropLabel"
+			aria-hidden="true"
+	>
+		<div class="modal-dialog modal-fullscreen">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="staticBackdropLabel">Select Region to Add</h5>
+					<button
+							type="button"
+							class="btn-close"
+							data-mdb-dismiss="modal"
+							aria-label="Close"
+					></button>
+				</div>
+				<div class="modal-body">
+					<div class="row gx-1 ">
+						<div class="col-md-6">
+							<div id="map_modal"></div>
+						</div>
+						<div class="col-md-6 no-scoll-modal-content">
+							<div class="list-group list-group-horizontal" id="list-modes" role="tablist">
+								<a id="car-item" href="#" class="list-group-item list-group-item-action active"
+								   data-mdb-toggle="list" role="tab" data="car"><i class="fa fa-automobile"></i></a>
+								<a id="bike-item" href="#" class="list-group-item list-group-item-action"
+								   data-mdb-toggle="list" role="tab" data="bike"><i class="fa fa-bicycle"></i></a>
+								<a id="walk-item" href="#" class="list-group-item list-group-item-action"
+								   data-mdb-toggle="list" role="tab" data="walk"><i class="fas fa-walking"></i></a>
+							</div>
+							<br/>
+							<div class="list-group regions" id="list-all-regions" role="tablist">
+								<a id="albania-item" href="#" class="list-group-item list-group-item-action"
+								   data-mdb-toggle="list" role="tab" data="europe/albania.html">Albania</a>
+								<div id="Albania" class="list-group"></div>
+								<a id="andorra-item" href="#" class="list-group-item list-group-item-action"
+								   data-mdb-toggle="list" role="tab" data="europe/andorra.html">Andorra</a>
+								<div id="Andorra" class="list-group"></div>
+								<a id="austria-item" href="#" class="list-group-item list-group-item-action"
+								   data-mdb-toggle="list" role="tab" data="europe/austria.html">Austria</a>
+								<div id="Austria" class="list-group"></div>
+								<a id="azores-item" href="#" class="list-group-item list-group-item-action"
+								   data-mdb-toggle="list" role="tab" data="europe/azores.html">Azores</a>
+								<div id="Azores" class="list-group"></div>
+								<a id="belarus-item" href="#" class="list-group-item list-group-item-action"
+								   data-mdb-toggle="list" role="tab" data="europe/belarus.html">Belarus</a>
+								<div id="Belarus" class="list-group"></div>
+								<a id="belgium-item" href="#" class="list-group-item list-group-item-action"
+								   data-mdb-toggle="list" role="tab" data="europe/belgium.html">Belgium</a>
+								<div id="Belgium" class="list-group"></div>
+								<a id="bosnia-herzegovina-item" href="#" class="list-group-item list-group-item-action"
+								   data-mdb-toggle="list" role="tab"
+								   data="europe/bosnia-herzegovina.html">Bosnia-Herzegovina</a>
+								<div id="Bosnia-Herzegovina" class="list-group"></div>
+								<a id="bulgaria-item" href="#" class="list-group-item list-group-item-action"
+								   data-mdb-toggle="list" role="tab" data="europe/bulgaria.html">Bulgaria</a>
+								<div id="Bulgaria" class="list-group"></div>
+								<a id="croatia-item" href="#" class="list-group-item list-group-item-action"
+								   data-mdb-toggle="list" role="tab" data="europe/croatia.html">Croatia</a>
+								<div id="Croatia" class="list-group"></div>
+								<a id="cyprus-item" href="#" class="list-group-item list-group-item-action"
+								   data-mdb-toggle="list" role="tab" data="europe/cyprus.html">Cyprus</a>
+								<div id="Cyprus" class="list-group"></div>
+								<a id="czech republic-item" href="#" class="list-group-item list-group-item-action"
+								   data-mdb-toggle="list" role="tab" data="europe/czech-republic.html">Czech
+									Republic</a>
+								<div id="Czech Republic" class="list-group"></div>
+								<a id="denmark-item" href="#" class="list-group-item list-group-item-action"
+								   data-mdb-toggle="list" role="tab" data="europe/denmark.html">Denmark</a>
+								<div id="Denmark" class="list-group"></div>
+								<a id="estonia-item" href="#" class="list-group-item list-group-item-action"
+								   data-mdb-toggle="list" role="tab" data="europe/estonia.html">Estonia</a>
+								<div id="Estonia" class="list-group"></div>
+								<a id="faroe islands-item" href="#" class="list-group-item list-group-item-action"
+								   data-mdb-toggle="list" role="tab" data="europe/faroe-islands.html">Faroe Islands</a>
+								<div id="Faroe Islands" class="list-group"></div>
+								<a id="finland-item" href="#" class="list-group-item list-group-item-action"
+								   data-mdb-toggle="list" role="tab" data="europe/finland.html">Finland</a>
+								<div id="Finland" class="list-group"></div>
+								<a id="france-item" href="#" class="list-group-item list-group-item-action"
+								   data-mdb-toggle="list" role="tab" data="europe/france.html">France</a>
+								<div id="France" class="list-group"><a id="alsace-item" href="#"
+																	   class="list-group-item list-group-item-action"
+																	   data-mdb-toggle="list" role="tab"
+																	   data="europe/france/alsace.html">Alsace</a><a
+										id="aquitaine-item" href="#" class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab"
+										data="europe/france/aquitaine.html">Aquitaine</a><a
+										id="auvergne-item" href="#" class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab"
+										data="europe/france/auvergne.html">Auvergne</a><a
+										id="basse-normandie-item" href="#"
+										class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab" data="europe/france/basse-normandie.html">Basse-Normandie</a><a
+										id="bourgogne-item" href="#" class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab"
+										data="europe/france/bourgogne.html">Bourgogne</a><a
+										id="bretagne-item" href="#" class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab"
+										data="europe/france/bretagne.html">Bretagne</a><a
+										id="centre-item" href="#" class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab" data="europe/france/centre.html">Centre</a><a
+										id="champagne ardenne-item" href="#"
+										class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab" data="europe/france/champagne-ardenne.html">Champagne
+									Ardenne</a><a id="corse-item" href="#"
+												  class="list-group-item list-group-item-action"
+												  data-mdb-toggle="list" role="tab"
+												  data="europe/france/corse.html">Corse</a><a
+										id="franche comte-item" href="#" class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab" data="europe/france/franche-comte.html">Franche
+									Comte</a><a id="guadeloupe-item" href="#"
+												class="list-group-item list-group-item-action"
+												data-mdb-toggle="list" role="tab" data="europe/france/guadeloupe.html">Guadeloupe</a><a
+										id="guyane-item" href="#" class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab" data="europe/france/guyane.html">Guyane</a><a
+										id="haute-normandie-item" href="#"
+										class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab" data="europe/france/haute-normandie.html">Haute-Normandie</a><a
+										id="ile-de-france-item" href="#" class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab"
+										data="europe/france/ile-de-france.html">Ile-de-France</a><a
+										id="languedoc-roussillon-item" href="#"
+										class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab"
+										data="europe/france/languedoc-roussillon.html">Languedoc-Roussillon</a><a
+										id="limousin-item" href="#" class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab"
+										data="europe/france/limousin.html">Limousin</a><a
+										id="lorraine-item" href="#" class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab"
+										data="europe/france/lorraine.html">Lorraine</a><a
+										id="martinique-item" href="#" class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab"
+										data="europe/france/martinique.html">Martinique</a><a
+										id="mayotte-item" href="#" class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab"
+										data="europe/france/mayotte.html">Mayotte</a><a
+										id="midi-pyrenees-item" href="#" class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab"
+										data="europe/france/midi-pyrenees.html">Midi-Pyrenees</a><a
+										id="nord-pas-de-calais-item"
+										href="#"
+										class="list-group-item list-group-item-action"
+										data-mdb-toggle="list"
+										role="tab"
+										data="europe/france/nord-pas-de-calais.html">Nord-Pas-de-Calais</a><a
+										id="pays de la loire-item" href="#"
+										class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab" data="europe/france/pays-de-la-loire.html">Pays
+									de
+									la
+									Loire</a><a id="picardie-item" href="#"
+												class="list-group-item list-group-item-action"
+												data-mdb-toggle="list" role="tab"
+												data="europe/france/picardie.html">Picardie</a><a
+										id="poitou-charentes-item"
+										href="#"
+										class="list-group-item list-group-item-action"
+										data-mdb-toggle="list"
+										role="tab"
+										data="europe/france/poitou-charentes.html">Poitou-Charentes</a><a
+										id="provence alpes-cote-dazur-item" href="#" class="list-group-item
+							list-group-item-action" data-mdb-toggle="list" role="tab"
+										data="europe/france/provence-alpes-cote-d-azur.html">Provence
+									Alpes-Cote-d'Azur</a><a
+										id="reunion-item" href="#" class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab"
+										data="europe/france/reunion.html">Reunion</a><a
+										id="rhone-alpes-item" href="#" class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab"
+										data="europe/france/rhone-alpes.html">Rhone-Alpes</a></div>
+								<a id="georgia-item" href="#" class="list-group-item list-group-item-action"
+								   data-mdb-toggle="list" role="tab" data="europe/georgia.html">Georgia</a>
+								<div id="Georgia" class="list-group"></div>
+								<a id="germany-item" href="#" class="list-group-item list-group-item-action"
+								   data-mdb-toggle="list" role="tab" data="europe/germany.html">Germany</a>
+								<div id="Germany" class="list-group"><a id="baden-württemberg-item" href="#"
+																		class="list-group-item list-group-item-action"
+																		data-mdb-toggle="list" role="tab"
+																		data="europe/germany/baden-wuerttemberg.html">Baden-Württemberg</a><a
+										id="bayern-item" href="#" class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab" data="europe/germany/bayern.html">Bayern</a><a
+										id="berlin-item" href="#" class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab" data="europe/germany/berlin.html">Berlin</a><a
+										id="brandenburg (mit berlin)-item" href="#"
+										class="list-group-item list-group-item-action" data-mdb-toggle="list" role="tab"
+										data="europe/germany/brandenburg.html">Brandenburg (mit Berlin)</a><a
+										id="bremen-item"
+										href="#"
+										class="list-group-item list-group-item-action"
+										data-mdb-toggle="list"
+										role="tab"
+										data="europe/germany/bremen.html">Bremen</a><a
+										id="hamburg-item" href="#" class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab" data="europe/germany/hamburg.html">Hamburg</a><a
+										id="hessen-item" href="#" class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab" data="europe/germany/hessen.html">Hessen</a><a
+										id="mecklenburg-vorpommern-item" href="#"
+										class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab"
+										data="europe/germany/mecklenburg-vorpommern.html">Mecklenburg-Vorpommern</a><a
+										id="niedersachsen-item" href="#" class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab"
+										data="europe/germany/niedersachsen.html">Niedersachsen</a><a
+										id="nordrhein-westfalen-item" href="#"
+										class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab"
+										data="europe/germany/nordrhein-westfalen.html">Nordrhein-Westfalen</a><a
+										id="rheinland-pfalz-item" href="#"
+										class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab" data="europe/germany/rheinland-pfalz.html">Rheinland-Pfalz</a><a
+										id="saarland-item" href="#" class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab"
+										data="europe/germany/saarland.html">Saarland</a><a
+										id="sachsen-item" href="#" class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab" data="europe/germany/sachsen.html">Sachsen</a><a
+										id="sachsen-anhalt-item" href="#" class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab" data="europe/germany/sachsen-anhalt.html">Sachsen-Anhalt</a><a
+										id="schleswig-holstein-item" href="#"
+										class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab" data="europe/germany/schleswig-holstein.html">Schleswig-Holstein</a><a
+										id="thüringen-item" href="#" class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab"
+										data="europe/germany/thueringen.html">Thüringen</a>
+								</div>
+								<a id="great britain-item" href="#" class="list-group-item list-group-item-action"
+								   data-mdb-toggle="list" role="tab" data="europe/great-britain.html">Great Britain</a>
+								<div id="Great Britain" class="list-group"></div>
+								<a id="greece-item" href="#" class="list-group-item list-group-item-action"
+								   data-mdb-toggle="list" role="tab" data="europe/greece.html">Greece</a>
+								<div id="Greece" class="list-group"></div>
+								<a id="guernsey-jersey-item" href="#" class="list-group-item list-group-item-action"
+								   data-mdb-toggle="list" role="tab"
+								   data="europe/guernsey-jersey.html">guernsey-jersey</a>
+								<div id="guernsey-jersey" class="list-group"></div>
+								<a id="hungary-item" href="#" class="list-group-item list-group-item-action"
+								   data-mdb-toggle="list" role="tab" data="europe/hungary.html">Hungary</a>
+								<div id="Hungary" class="list-group"></div>
+								<a id="iceland-item" href="#" class="list-group-item list-group-item-action"
+								   data-mdb-toggle="list" role="tab" data="europe/iceland.html">Iceland</a>
+								<div id="Iceland" class="list-group"></div>
+								<a id="ireland and northern ireland-item" href="#"
+								   class="list-group-item list-group-item-action" data-mdb-toggle="list" role="tab"
+								   data="europe/ireland-and-northern-ireland.html">Ireland and Northern Ireland</a>
+								<div id="Ireland and Northern Ireland" class="list-group"></div>
+								<a id="isle of man-item" href="#" class="list-group-item list-group-item-action"
+								   data-mdb-toggle="list" role="tab" data="europe/isle-of-man.html">Isle of Man</a>
+								<div id="Isle of Man" class="list-group"></div>
+								<a id="italy-item" href="#" class="list-group-item list-group-item-action"
+								   data-mdb-toggle="list" role="tab" data="europe/italy.html">Italy</a>
+								<div id="Italy" class="list-group"><a id="centro-item" href="#"
+																	  class="list-group-item list-group-item-action"
+																	  data-mdb-toggle="list" role="tab"
+																	  data="europe/italy/centro.html">Centro</a><a
+										id="isole-item" href="#" class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab" data="europe/italy/isole.html">Isole</a><a
+										id="nord-est-item" href="#" class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab" data="europe/italy/nord-est.html">Nord-Est</a><a
+										id="nord-ovest-item" href="#" class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab"
+										data="europe/italy/nord-ovest.html">Nord-Ovest</a><a
+										id="sud-item" href="#" class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab" data="europe/italy/sud.html">Sud</a></div>
+								<a id="kosovo-item" href="#" class="list-group-item list-group-item-action"
+								   data-mdb-toggle="list" role="tab" data="europe/kosovo.html">Kosovo</a>
+								<div id="Kosovo" class="list-group"></div>
+								<a id="latvia-item" href="#" class="list-group-item list-group-item-action"
+								   data-mdb-toggle="list" role="tab" data="europe/latvia.html">Latvia</a>
+								<div id="Latvia" class="list-group"></div>
+								<a id="liechtenstein-item" href="#" class="list-group-item list-group-item-action"
+								   data-mdb-toggle="list" role="tab" data="europe/liechtenstein.html">Liechtenstein</a>
+								<div id="Liechtenstein" class="list-group"></div>
+								<a id="lithuania-item" href="#" class="list-group-item list-group-item-action"
+								   data-mdb-toggle="list" role="tab" data="europe/lithuania.html">Lithuania</a>
+								<div id="Lithuania" class="list-group"></div>
+								<a id="luxembourg-item" href="#" class="list-group-item list-group-item-action"
+								   data-mdb-toggle="list" role="tab" data="europe/luxembourg.html">Luxembourg</a>
+								<div id="Luxembourg" class="list-group"></div>
+								<a id="macedonia-item" href="#" class="list-group-item list-group-item-action"
+								   data-mdb-toggle="list" role="tab" data="europe/macedonia.html">Macedonia</a>
+								<div id="Macedonia" class="list-group"></div>
+								<a id="malta-item" href="#" class="list-group-item list-group-item-action"
+								   data-mdb-toggle="list" role="tab" data="europe/malta.html">Malta</a>
+								<div id="Malta" class="list-group"></div>
+								<a id="moldova-item" href="#" class="list-group-item list-group-item-action"
+								   data-mdb-toggle="list" role="tab" data="europe/moldova.html">Moldova</a>
+								<div id="Moldova" class="list-group"></div>
+								<a id="monaco-item" href="#" class="list-group-item list-group-item-action"
+								   data-mdb-toggle="list" role="tab" data="europe/monaco.html">Monaco</a>
+								<div id="Monaco" class="list-group"></div>
+								<a id="montenegro-item" href="#" class="list-group-item list-group-item-action"
+								   data-mdb-toggle="list" role="tab" data="europe/montenegro.html">Montenegro</a>
+								<div id="Montenegro" class="list-group"></div>
+								<a id="netherlands-item" href="#" class="list-group-item list-group-item-action"
+								   data-mdb-toggle="list" role="tab" data="europe/netherlands.html">Netherlands</a>
+								<div id="Netherlands" class="list-group"><a id="drenthe-item" href="#"
+																			class="list-group-item list-group-item-action"
+																			data-mdb-toggle="list" role="tab"
+																			data="europe/netherlands/drenthe.html">Drenthe</a><a
+										id="flevoland-item" href="#" class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab"
+										data="europe/netherlands/flevoland.html">Flevoland</a><a
+										id="friesland-item" href="#" class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab"
+										data="europe/netherlands/friesland.html">Friesland</a><a
+										id="gelderland-item" href="#" class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab"
+										data="europe/netherlands/gelderland.html">Gelderland</a><a id="groningen-item"
+																								   href="#"
+																								   class="list-group-item list-group-item-action"
+																								   data-mdb-toggle="list"
+																								   role="tab"
+																								   data="europe/netherlands/groningen.html">Groningen</a><a
+										id="limburg-item" href="#" class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab"
+										data="europe/netherlands/limburg.html">Limburg</a><a
+										id="noord-brabant-item" href="#" class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab" data="europe/netherlands/noord-brabant.html">Noord-Brabant</a><a
+										id="noord-holland-item" href="#" class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab" data="europe/netherlands/noord-holland.html">Noord-Holland</a><a
+										id="overijssel-item" href="#" class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab"
+										data="europe/netherlands/overijssel.html">Overijssel</a><a id="utrecht-item"
+																								   href="#"
+																								   class="list-group-item list-group-item-action"
+																								   data-mdb-toggle="list"
+																								   role="tab"
+																								   data="europe/netherlands/utrecht.html">Utrecht</a><a
+										id="zeeland-item" href="#" class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab"
+										data="europe/netherlands/zeeland.html">Zeeland</a><a
+										id="zuid-holland-item" href="#" class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab" data="europe/netherlands/zuid-holland.html">Zuid-Holland</a>
+								</div>
+								<a id="norway-item" href="#" class="list-group-item list-group-item-action"
+								   data-mdb-toggle="list" role="tab" data="europe/norway.html">Norway</a>
+								<div id="Norway" class="list-group"></div>
+								<a id="poland-item" href="#" class="list-group-item list-group-item-action"
+								   data-mdb-toggle="list" role="tab" data="europe/poland.html">Poland</a>
+								<div id="Poland" class="list-group"><a
+										id="województwo dolnośląskie(lower silesian voivodeship)-item" href="#"
+										class="list-group-item list-group-item-action" data-mdb-toggle="list" role="tab"
+										data="europe/poland/dolnoslaskie.html">Województwo dolnośląskie(Lower Silesian
+									Voivodeship)</a><a
+										id="województwo kujawsko-pomorskie(kuyavian-pomeranian voivodeship)-item"
+										href="#"
+										class="list-group-item list-group-item-action" data-mdb-toggle="list" role="tab"
+										data="europe/poland/kujawsko-pomorskie.html">Województwo
+									kujawsko-pomorskie(Kuyavian-Pomeranian Voivodeship)</a><a
+										id="województwo łódzkie(łódź voivodeship)-item" href="#"
+										class="list-group-item list-group-item-action" data-mdb-toggle="list" role="tab"
+										data="europe/poland/lodzkie.html">Województwo łódzkie(Łódź Voivodeship)</a><a
+										id="województwo lubelskie(lublin voivodeship)-item" href="#"
+										class="list-group-item list-group-item-action" data-mdb-toggle="list" role="tab"
+										data="europe/poland/lubelskie.html">Województwo lubelskie(Lublin
+									Voivodeship)</a><a
+										id="województwo lubuskie(lubusz voivodeship)-item" href="#"
+										class="list-group-item list-group-item-action" data-mdb-toggle="list" role="tab"
+										data="europe/poland/lubuskie.html">Województwo lubuskie(Lubusz
+									Voivodeship)</a><a
+										id="województwo małopolskie(lesser poland voivodeship)-item" href="#"
+										class="list-group-item list-group-item-action" data-mdb-toggle="list" role="tab"
+										data="europe/poland/malopolskie.html">Województwo małopolskie(Lesser Poland
+									Voivodeship)</a><a id="-item" href="#"
+													   class="list-group-item list-group-item-action"
+													   data-mdb-toggle="list" role="tab" data="europe/undefined"></a><a
+										id="województwo mazowieckie(mazovian voivodeship)-item" href="#"
+										class="list-group-item list-group-item-action" data-mdb-toggle="list" role="tab"
+										data="europe/poland/mazowieckie.html">Województwo mazowieckie(Mazovian
+									Voivodeship)</a><a
+										id="województwo opolskie(opole voivodeship)-item" href="#"
+										class="list-group-item list-group-item-action" data-mdb-toggle="list" role="tab"
+										data="europe/poland/opolskie.html">Województwo opolskie(Opole Voivodeship)</a><a
+										id="województwo podkarpackie(subcarpathian voivodeship)-item" href="#"
+										class="list-group-item list-group-item-action" data-mdb-toggle="list" role="tab"
+										data="europe/poland/podkarpackie.html">Województwo podkarpackie(Subcarpathian
+									Voivodeship)</a><a
+										id="województwo podlaskie(podlaskie voivodeship)-item" href="#"
+										class="list-group-item list-group-item-action" data-mdb-toggle="list" role="tab"
+										data="europe/poland/podlaskie.html">Województwo podlaskie(Podlaskie
+									Voivodeship)</a><a
+										id="województwo pomorskie(pomeranian voivodeship)-item" href="#"
+										class="list-group-item list-group-item-action" data-mdb-toggle="list" role="tab"
+										data="europe/poland/pomorskie.html">Województwo pomorskie(Pomeranian
+									Voivodeship)</a><a
+										id="województwo śląskie(silesian voivodeship)-item" href="#"
+										class="list-group-item list-group-item-action" data-mdb-toggle="list" role="tab"
+										data="europe/poland/slaskie.html">Województwo śląskie(Silesian
+									Voivodeship)</a><a
+										id="województwo świętokrzyskie(świętokrzyskie voivodeship)-item" href="#"
+										class="list-group-item list-group-item-action" data-mdb-toggle="list" role="tab"
+										data="europe/poland/swietokrzyskie.html">Województwo
+									świętokrzyskie(Świętokrzyskie
+									Voivodeship)</a><a
+										id="województwo warmińsko-mazurskie(warmian-masurian voivodeship)-item" href="#"
+										class="list-group-item list-group-item-action" data-mdb-toggle="list" role="tab"
+										data="europe/poland/warminsko-mazurskie.html">Województwo
+									warmińsko-mazurskie(Warmian-Masurian Voivodeship)</a><a
+										id="województwo wielkopolskie(greater poland voivodeship)-item" href="#"
+										class="list-group-item list-group-item-action" data-mdb-toggle="list" role="tab"
+										data="europe/poland/wielkopolskie.html">Województwo wielkopolskie(Greater Poland
+									Voivodeship)</a><a
+										id="województwo zachodniopomorskie(west pomeranian voivodeship)-item" href="#"
+										class="list-group-item list-group-item-action" data-mdb-toggle="list" role="tab"
+										data="europe/poland/zachodniopomorskie.html">Województwo zachodniopomorskie(West
+									Pomeranian Voivodeship)</a>
+								</div>
+								<a id="portugal-item" href="#" class="list-group-item list-group-item-action"
+								   data-mdb-toggle="list" role="tab" data="europe/portugal.html">Portugal</a>
+								<div id="Portugal" class="list-group"></div>
+								<a id="romania-item" href="#" class="list-group-item list-group-item-action"
+								   data-mdb-toggle="list" role="tab" data="europe/romania.html">Romania</a>
+								<div id="Romania" class="list-group"></div>
+								<a id="russian federation-item" href="#" class="list-group-item list-group-item-action"
+								   data-mdb-toggle="list" role="tab" data="russia.html">Russian Federation</a>
+								<div id="Russian Federation" class="list-group"></div>
+								<a id="serbia-item" href="#" class="list-group-item list-group-item-action"
+								   data-mdb-toggle="list" role="tab" data="europe/serbia.html">Serbia</a>
+								<div id="Serbia" class="list-group"></div>
+								<a id="slovakia-item" href="#" class="list-group-item list-group-item-action"
+								   data-mdb-toggle="list" role="tab" data="europe/slovakia.html">Slovakia</a>
+								<div id="Slovakia" class="list-group"></div>
+								<a id="slovenia-item" href="#" class="list-group-item list-group-item-action"
+								   data-mdb-toggle="list" role="tab" data="europe/slovenia.html">Slovenia</a>
+								<div id="Slovenia" class="list-group"></div>
+								<a id="spain-item" href="#" class="list-group-item list-group-item-action"
+								   data-mdb-toggle="list" role="tab" data="europe/spain.html">Spain</a>
+								<div id="Spain" class="list-group"><a id="andalucía-item" href="#"
+																	  class="list-group-item list-group-item-action"
+																	  data-mdb-toggle="list" role="tab"
+																	  data="europe/spain/andalucia.html">Andalucía</a><a
+										id="aragón-item" href="#" class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab" data="europe/spain/aragon.html">Aragón</a><a
+										id="asturias-item" href="#" class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab" data="europe/spain/asturias.html">Asturias</a><a
+										id="cantabria-item" href="#" class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab"
+										data="europe/spain/cantabria.html">Cantabria</a><a
+										id="castilla-la mancha-item" href="#"
+										class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab" data="europe/spain/castilla-la-mancha.html">Castilla-La
+									Mancha</a><a id="castilla y león-item" href="#"
+												 class="list-group-item list-group-item-action" data-mdb-toggle="list"
+												 role="tab" data="europe/spain/castilla-y-leon.html">Castilla y León</a><a
+										id="cataluña-item" href="#" class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab" data="europe/spain/cataluna.html">Cataluña</a><a
+										id="ceuta-item" href="#" class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab" data="europe/spain/ceuta.html">Ceuta</a><a
+										id="extremadura-item" href="#" class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab"
+										data="europe/spain/extremadura.html">Extremadura</a><a
+										id="galicia-item" href="#" class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab" data="europe/spain/galicia.html">Galicia</a><a
+										id="islas baleares-item" href="#" class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab" data="europe/spain/islas-baleares.html">Islas
+									Baleares</a><a id="la rioja-item" href="#"
+												   class="list-group-item list-group-item-action"
+												   data-mdb-toggle="list" role="tab" data="europe/spain/la-rioja.html">La
+									Rioja</a><a id="madrid-item" href="#" class="list-group-item list-group-item-action"
+												data-mdb-toggle="list" role="tab"
+												data="europe/spain/madrid.html">Madrid</a><a
+										id="melilla-item" href="#" class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab" data="europe/spain/melilla.html">Melilla</a><a
+										id="murcia-item" href="#" class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab" data="europe/spain/murcia.html">Murcia</a><a
+										id="navarra-item" href="#" class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab" data="europe/spain/navarra.html">Navarra</a><a
+										id="país vasco-item" href="#" class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab" data="europe/spain/pais-vasco.html">País
+									Vasco</a><a
+										id="valencia-item" href="#" class="list-group-item list-group-item-action"
+										data-mdb-toggle="list" role="tab" data="europe/spain/valencia.html">Valencia</a>
+								</div>
+								<a id="sweden-item" href="#" class="list-group-item list-group-item-action"
+								   data-mdb-toggle="list" role="tab" data="europe/sweden.html">Sweden</a>
+								<div id="Sweden" class="list-group"></div>
+								<a id="switzerland-item" href="#" class="list-group-item list-group-item-action"
+								   data-mdb-toggle="list" role="tab" data="europe/switzerland.html">Switzerland</a>
+								<div id="Switzerland" class="list-group"></div>
+								<a id="turkey-item" href="#" class="list-group-item list-group-item-action"
+								   data-mdb-toggle="list" role="tab" data="europe/turkey.html">Turkey</a>
+								<div id="Turkey" class="list-group"></div>
+								<a id="ukraine (with crimea)-item" href="#"
+								   class="list-group-item list-group-item-action"
+								   data-mdb-toggle="list" role="tab" data="europe/ukraine.html">Ukraine (with
+									Crimea)</a>
+								<div id="Ukraine (with Crimea)" class="list-group"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">
+						Close
+					</button>
+					<button type="button" class="btn btn-primary add-region" data-mdb-dismiss="modal">Load</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- End your project here-->
+
+	<!-- MDB -->
+	<script type="text/javascript" src="js/mdb.min.js"></script>
+	<!-- OpenLayers -->
+	<script type="text/javascript" src="//static.geofabrik.de/ol212/OpenLayers.js"></script>
+	<!-- Custom scripts -->
+	<script type="text/javascript" src="js/map.js"></script>
+	<script type="text/javascript" src="js/Toast.min.js"></script>
+</body>
+</html>
