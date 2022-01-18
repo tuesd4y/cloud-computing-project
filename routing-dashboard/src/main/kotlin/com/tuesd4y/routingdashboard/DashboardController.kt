@@ -19,6 +19,7 @@ class DashboardController(private val kubernetesService: KubernetesApiService) {
     @PostMapping("startProcessing")
     fun startProcessing(@RequestBody startProcessingInformation: StartProcessingInformation): ResponseEntity<Any> {
 
+        println("Starting processing called with $startProcessingInformation")
         kubernetesService.startProcessing(startProcessingInformation)
 
 		return ResponseEntity.accepted().build()
@@ -26,6 +27,7 @@ class DashboardController(private val kubernetesService: KubernetesApiService) {
 
     @PostMapping("processingFinished")
     fun processingFinished(@RequestBody processingFinishedInformation: ProcessingFinishedInformation): ResponseEntity<Any> {
+        println("Processing finished called with $processingFinishedInformation")
         val (deployment, service) = kubernetesService.startServer(processingFinishedInformation)
         return ResponseEntity.ok(mapOf(
             "deploymentMetadata" to deployment.metadata!!,
@@ -33,5 +35,10 @@ class DashboardController(private val kubernetesService: KubernetesApiService) {
         ))
     }
 
-	//TODO Shutdown / Stop
+    @DeleteMapping("{identifier}")
+    fun stopService(identifier: String): ResponseEntity<String> {
+        println("StopService called with $identifier")
+        kubernetesService.stopServer(identifier)
+        return ResponseEntity.ok().build()
+    }
 }

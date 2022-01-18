@@ -7,8 +7,10 @@ import com.tuesd4y.routingdashboard.entity.StartProcessingInformation
 import io.kubernetes.client.openapi.ApiException
 import io.kubernetes.client.openapi.apis.AppsV1Api
 import io.kubernetes.client.openapi.apis.AutoscalingV2beta2Api
+import io.kubernetes.client.openapi.apis.BatchV1Api
 import io.kubernetes.client.openapi.apis.CoreV1Api
 import io.kubernetes.client.openapi.models.V1Deployment
+import io.kubernetes.client.openapi.models.V1Job
 import io.kubernetes.client.openapi.models.V1Service
 import io.kubernetes.client.openapi.models.V2beta2HorizontalPodAutoscaler
 import io.kubernetes.client.util.Yaml
@@ -20,6 +22,7 @@ class KubernetesApiService(
     private val coreV1Api: CoreV1Api,
     private val appsV1Api: AppsV1Api,
     private val autoscalingV2beta2Api: AutoscalingV2beta2Api,
+    private val batchV1Api: BatchV1Api,
     private val awsCredentials: AwsCredentials
 ) {
     companion object {
@@ -32,6 +35,39 @@ class KubernetesApiService(
 
 		const val download_server_url = "https://download.geofabrik.de/"
         const val s3bucket = "s3://triply-routing-data"
+    }
+
+    fun stopServer(identifier: String) {
+        autoscalingV2beta2Api.deleteNamespacedHorizontalPodAutoscaler(
+            "routing-service-$identifier",
+            NAMESPACE,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        )
+        coreV1Api.deleteNamespacedService(
+            "routing-service-$identifier-entrypoint",
+            NAMESPACE,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        )
+        appsV1Api.deleteNamespacedDeployment(
+            "routing-service-$identifier",
+            NAMESPACE,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        )
     }
 
     fun getCurrentlyRunningServices(): List<RoutingService> {
@@ -60,8 +96,18 @@ class KubernetesApiService(
 		val region = startProcessingInformation.region
         val mode = startProcessingInformation.mode
         val pbfUrl = download_server_url + startProcessingInformation.pbfLink
-        val jobString = "" //JobTemplate.buildRealYaml()
-        val job = Yaml.load(jobString) as V1Deployment
+        val jobString = JobTemplate.buildRealYaml(
+            "$region-$mode",
+            awsCredentials.awsAccessKeyId,
+            awsCredentials.awsSecretAccessKey,
+            s3bucket,
+            mode,
+            region,
+            pbfUrl
+        )
+        val job = Yaml.load(jobString) as V1Job
+
+        batchV1Api.createNamespacedJob(NAMESPACE, job, null, null, null)
     }
 
     fun startServer(processingFinishedInformation: ProcessingFinishedInformation): Triple<V1Deployment, V1Service, V2beta2HorizontalPodAutoscaler> {
