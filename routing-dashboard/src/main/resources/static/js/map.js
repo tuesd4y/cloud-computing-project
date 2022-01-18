@@ -220,10 +220,6 @@ $(document).ready(function () {
 	var modeToAdd;
 	$(document).on("click", "#list-modes a", function () {
 		modeToAdd = $(this).attr('data');
-		if(modalMapLoaded == 0){
-			initModalMap();
-			modalMapLoaded = 1;
-		}
 	});
 
 	var modalMapLoaded = 0, regionToDelete;
@@ -243,20 +239,11 @@ $(document).ready(function () {
 			headers: {
 				"Authorization": "Basic " + "dXNlcjpwYXNzd29yZA=="
 			},
-			statusCode: {
-				202: function (response) {
-					console.log(response);
-					new Toast({
-						message: 'Processing Started: Region was deleted!',
-						type: 'success'
-					});
-				}
-			},
-			500: function (response) {
+			success: function (result) {
 				console.log(response);
 				new Toast({
-					message: 'Processing Error: Something went wrong. Contact Admin.',
-					type: 'danger'
+					message: 'Processing Started: Region was deleted!',
+					type: 'success'
 				});
 			}
 		});
@@ -271,22 +258,21 @@ $(document).ready(function () {
 				"Authorization": "Basic " + "dXNlcjpwYXNzd29yZA=="
 			},
 			data: JSON.stringify({"htmlLink":regionToAdd, "mode":modeToAdd}),
-			statusCode: {
-				202: function (response) {
+			success: function (result) {
 					console.log(response);
 					new Toast({
 						message: 'Processing Started: New region will be available within the next 24 hours.',
 						type: 'success'
 					});
-				}
-				},
-				500: function (response) {
-					console.log(response);
-					new Toast({
-						message: 'Processing Error: Something went wrong. Contact Admin.',
-						type: 'danger'
-					});
 			}
 		});
+	});
+
+	$(document).on("click", "#openModal", function () {
+
+		if(modalMapLoaded == 0){
+			setTimeout(function(){ initModalMap() }, 1000);
+			modalMapLoaded = 1;
+		}
 	});
 })
