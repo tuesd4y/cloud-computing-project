@@ -19,7 +19,7 @@ spec:
       serviceAccountName: routing-dashboard-admin
       containers:
       - name: routing-dashboard
-        image: tuesd4y/routing-backend:v1.1.3
+        image: tuesd4y/routing-backend:v1.1.5
         resources:
           requests:
             memory: "500Mi"
