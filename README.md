@@ -65,6 +65,7 @@ Christopher Stelzmüller
 - names have to be lowercase!
 - access through user accounts
 - giving AWS accounts access to kubernetes isn't that easy
+- AWS account keys are automatically disabled when exposed on github
 
 ## TODO Setup instructions
 
@@ -72,8 +73,19 @@ Christopher Stelzmüller
 - AWS credentials in routing-dashboard.yaml
 - configure AWS S3 bucket url in Java code
 - apply routing-dashboard.yaml
+- Setup of infrastructure and user accounts
 
 ## TODO Open questions and next steps
 
-- hide AWS credentials from storage
+- hide AWS credentials from storage -> secrets
 - show current scaling and configure mem/cpu
+- DNS based on service names + security for outside access
+
+## TODO Tutorial
+
+- Setup + prerequisites
+- deploying a new service area with the UI
+- watch HPA for service
+- using load-generator to demonstrate scaling
+- show covered area in UI
+- illustrate "processing pipeline"
