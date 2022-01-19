@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?> <kml xmlns="http://earth.google.com/kml/2.0"> <Document> <Placemark> <MultiGeometry>
+<Polygon> <outerBoundaryIs> <LinearRing>  <coordinates>
+-1.253002,50.801020,0
+-1.031370,50.692960,0
+-1.114103,50.610670,0
+-1.307651,50.505550,0
+-1.659074,50.624150,0
+-1.518657,50.720360,0
+-1.253002,50.801020,0
+</coordinates> </LinearRing> </outerBoundaryIs>  </Polygon>
+</MultiGeometry> <Style> <PolyStyle>  <color>#a00000ff</color> <outline>0</outline> </PolyStyle> </Style> </Placemark> </Document> </kml>

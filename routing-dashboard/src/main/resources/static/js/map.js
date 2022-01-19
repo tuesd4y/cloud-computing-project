@@ -1,6 +1,6 @@
 var map, map_modal, layer, layer_modal, countryLayer, activeLayer, activeModalLayer;
 var runningServices;
-var serverUrl = "http://localhost:8080/servers";
+var serverUrl = "/servers";
 
 function initMainMap() {
 	//init main map
@@ -17,7 +17,7 @@ function initMainMap() {
 	layer = new OpenLayers.Layer.Vector("KML", {
 		strategies: [new OpenLayers.Strategy.Fixed()],
 		protocol: new OpenLayers.Protocol.HTTP({
-			url: "https://download.geofabrik.de/europe.kml",
+			url: "data/europe.kml",
 			format: new OpenLayers.Format.KML({
 				maxDepth: 2
 			})
@@ -53,7 +53,7 @@ function initModalMap(){
 	layer_modal = new OpenLayers.Layer.Vector("KML", {
 		strategies: [new OpenLayers.Strategy.Fixed()],
 		protocol: new OpenLayers.Protocol.HTTP({
-			url: "https://download.geofabrik.de/europe.kml",
+			url: "data/europe.kml",
 			format: new OpenLayers.Format.KML({
 				maxDepth: 2
 			})
@@ -121,13 +121,13 @@ $(document).ready(function () {
 			$(result).each(function () {
 				var name = $("#" + this.region.split("-")[0] + "-item").text();
 
-				$(".active-regions").append('<a class="list-group-item list-group-item-action" href="#" identifier="' + this.region + '-' + this.mode + '" data="' + this.shapeUrl + '" data-mdb-toggle="list" role="tab"><i class="fa-active fa '+ this.iconClass +'"></i>  ' + name + '</a>');
+				$(".active-regions").append('<a class="list-group-item list-group-item-action" href="#" identifier="' + this.region + '-' + this.mode + '" data="' + this.shapePath + '" data-mdb-toggle="list" role="tab"><i class="fa-active '+ this.iconClass +'"></i>  ' + name + '</a>');
 
 				countryLayer =
 					new OpenLayers.Layer.Vector("KML", {
 						strategies: [new OpenLayers.Strategy.Fixed()],
 						protocol: new OpenLayers.Protocol.HTTP({
-							url: this.shapeUrl,
+							url: this.shapePath,
 							format: new OpenLayers.Format.KML({
 								maxDepth: 2
 							})
@@ -189,7 +189,7 @@ $(document).ready(function () {
 		activeModalLayer = new OpenLayers.Layer.Vector("KML", {
 			strategies: [new OpenLayers.Strategy.Fixed()],
 			protocol: new OpenLayers.Protocol.HTTP({
-				url: "https://download.geofabrik.de/" + $(this).attr("data").split(".")[0] + ".kml",
+				url: "data/" + $(this).attr("data").split(".")[0] + ".kml",
 				format: new OpenLayers.Format.KML({
 					maxDepth: 2
 				})

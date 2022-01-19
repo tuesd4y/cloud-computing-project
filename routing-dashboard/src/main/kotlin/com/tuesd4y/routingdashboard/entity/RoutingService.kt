@@ -6,11 +6,14 @@ data class RoutingService(
 	val sourceUrl: String,
 	val setupTime: String
 ){
-	val shapeUrl : String = sourceUrl.substring(0, sourceUrl.lastIndexOf("-")) + ".kml"
+	//more generic shapePath creation needed
+	val shapePath : String = "data/" + sourceUrl.substring(sourceUrl.lastIndexOf("europe"), sourceUrl.lastIndexOf("-")) + ".kml"
 	val iconClass : String = when (mode) {
-		"car" -> "fa-automobile"
-		"bike" -> "fa-bicycle"
-		"foot" -> "fa-walking"
-		else -> ""
+		"car" -> "fa fa-automobile"
+		"bike" -> "fa fa-bicycle"
+		"bicycle" -> "fa fa-bicycle"
+		"foot" -> "fas fa-walking"
+		"walk" -> "fas fa-walking"
+		else -> "fa fa-question"
 	}
 }
