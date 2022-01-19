@@ -1,5 +1,10 @@
 package com.tuesd4y.routingdashboard.service
 
+import io.kubernetes.client.custom.IntOrString
+import io.kubernetes.client.openapi.models.V1ObjectMeta
+import io.kubernetes.client.openapi.models.V1Service
+import io.kubernetes.client.openapi.models.V1ServicePort
+import io.kubernetes.client.openapi.models.V1ServiceSpec
 import org.intellij.lang.annotations.Language
 import java.time.LocalDateTime
 
@@ -17,6 +22,31 @@ object ServiceTemplate {
     private const val regionPlaceholder = "{{region}}"
     private const val modePlaceholder = "{{mode}}"
     private const val timePlaceholder = "{{time}}"
+
+    fun buildService(identifier: String, source: String, region: String, mode: String, time: LocalDateTime) =
+        V1Service().apiVersion("v1").kind("Service").metadata(
+            V1ObjectMeta()
+                .name("routing-service-$identifier-entrypoint")
+                .namespace("routing-service")
+                .labels(mapOf(
+                    "app" to "routing-server",
+                    "routing-config" to identifier
+                ))
+                .annotations(mapOf(
+                    "source-url" to source,
+                    "region" to region,
+                    "mode" to mode,
+                    "time" to time.toString()
+                )))
+            .spec(V1ServiceSpec()
+                .type("ClusterIP")
+                .selector(mapOf("routing-config" to identifier))
+                .ports(listOf(
+                    V1ServicePort()
+                        .port(5000)
+                        .targetPort(IntOrString(5000))
+                        .protocol("TCP")
+                )))
 
     @Language("yaml")
     private const val yamlString =  """

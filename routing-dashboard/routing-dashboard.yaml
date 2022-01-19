@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: routing-dashboard
+  namespace: routing-service
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      config: dashboard
+  template:
+    metadata:
+      labels:
+        app: routing-server
+        config: dashboard
+
+    spec:
+      serviceAccountName: routing-dashboard-admin
+      containers:
+      - name: routing-dashboard
+        image: tuesd4y/routing-backend:v1.1.3
+        resources:
+          requests:
+            memory: "500Mi"
+            cpu: "500m"
+        env:
+        - name: AWS_ACCESS_KEY_ID
+          value: "KEY"
+        - name: AWS_SECRET_ACCESS_KEY
+          value: "SECRET"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: routing-dashboard
+  namespace: routing-service
+  labels:
+    app: routing-server
+    config: dashboard
+spec:
+  type: ClusterIP
+  selector:
+    config: dashboard
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080

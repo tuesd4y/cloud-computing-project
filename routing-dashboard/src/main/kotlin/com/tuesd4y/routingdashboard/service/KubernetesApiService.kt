@@ -10,10 +10,8 @@ import io.kubernetes.client.openapi.apis.AutoscalingV2beta2Api
 import io.kubernetes.client.openapi.apis.BatchV1Api
 import io.kubernetes.client.openapi.apis.CoreV1Api
 import io.kubernetes.client.openapi.models.V1Deployment
-import io.kubernetes.client.openapi.models.V1Job
 import io.kubernetes.client.openapi.models.V1Service
 import io.kubernetes.client.openapi.models.V2beta2HorizontalPodAutoscaler
-import io.kubernetes.client.util.Yaml
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 
@@ -33,7 +31,7 @@ class KubernetesApiService(
         const val SOURCE_KEY = "source-url"
         const val TIME_KEY = "time"
 
-		const val download_server_url = "https://download.geofabrik.de/"
+        const val download_server_url = "https://download.geofabrik.de/"
         const val s3bucket = "s3://triply-routing-data"
     }
 
@@ -72,8 +70,7 @@ class KubernetesApiService(
 
     fun getCurrentlyRunningServices(): List<RoutingService> {
         val services = coreV1Api.listNamespacedService(
-            NAMESPACE, null, null, null, null,
-            LABEL_SELECTOR, null, null, null, null, false
+            NAMESPACE, null, null, null, null, null, null, null, null, null, null
         )
         return services.items.mapNotNull { apiService ->
             try {
@@ -91,12 +88,10 @@ class KubernetesApiService(
     }
 
     fun startProcessing(startProcessingInformation: StartProcessingInformation) {
-
-
-		val region = startProcessingInformation.region
+        val region = startProcessingInformation.region
         val mode = startProcessingInformation.mode
         val pbfUrl = download_server_url + startProcessingInformation.pbfLink
-        val jobString = JobTemplate.buildRealYaml(
+        val job = JobTemplate.buildJob(
             "$region-$mode",
             awsCredentials.awsAccessKeyId,
             awsCredentials.awsSecretAccessKey,
@@ -105,33 +100,34 @@ class KubernetesApiService(
             region,
             pbfUrl
         )
-        val job = Yaml.load(jobString) as V1Job
 
-        batchV1Api.createNamespacedJob(NAMESPACE, job, null, null, null)
+        try {
+            batchV1Api.createNamespacedJob(NAMESPACE, job, null, null, null)
+        } catch (apiException: ApiException) {
+            System.err.println(apiException.message)
+            System.err.println(apiException.responseBody)
+            apiException.printStackTrace()
+            throw apiException
+        }
     }
 
     fun startServer(processingFinishedInformation: ProcessingFinishedInformation): Triple<V1Deployment, V1Service, V2beta2HorizontalPodAutoscaler> {
         val label = processingFinishedInformation.label
         val region = label.replace("-${processingFinishedInformation.mode}", "")
-        val deploymentString = DeploymentTemplate.buildRealYaml(
+        val deployment = DeploymentTemplate.buildDeployment(
             label,
             awsCredentials.awsAccessKeyId,
             awsCredentials.awsSecretAccessKey,
             s3bucket
         )
-        val deployment = Yaml.load(deploymentString) as V1Deployment
-
-        val serviceString = ServiceTemplate.buildRealYaml(
+        val service = ServiceTemplate.buildService(
             label,
             processingFinishedInformation.source,
             region,
             processingFinishedInformation.mode,
             LocalDateTime.now()
         )
-        val service = Yaml.load(serviceString) as V1Service
-
-        val autoscalerString = AutoscalerTemplate.buildRealYaml(label)
-        val autoscaler = Yaml.load(autoscalerString) as V2beta2HorizontalPodAutoscaler
+        val autoscaler = AutoscalerTemplate.buildAutoscaler(label)
 
         try {
             val deploymentResponse = appsV1Api.createNamespacedDeployment(NAMESPACE, deployment, null, null, null)
@@ -139,9 +135,11 @@ class KubernetesApiService(
             val autoscalingResponse =
                 autoscalingV2beta2Api.createNamespacedHorizontalPodAutoscaler(NAMESPACE, autoscaler, null, null, null)
             return Triple(deploymentResponse, serviceResponse, autoscalingResponse)
-        } catch (ex: ApiException) {
-            System.err.println("Received API error response body: ${ex.responseBody}")
-            throw ex
+        } catch (apiException: ApiException) {
+            System.err.println(apiException.message)
+            System.err.println(apiException.responseBody)
+            apiException.printStackTrace()
+            throw apiException
         }
 
     }
