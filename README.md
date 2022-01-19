@@ -54,7 +54,7 @@ The "deployment" of each server is done along the following pipeline:
 - Kubernets Job for preprocessing routing engines
 - Dashboard Backend for interfacing with kubernetes API
 
-## Research
+## Research & Insights
 
 ### Horizontal Pod Autoscaling
 
@@ -150,63 +150,51 @@ We're using a [kubernetes job](https://kubernetes.io/docs/concepts/workloads/con
 - apply routing-dashboard.yaml
 - Setup of infrastructure and user accounts
 
-- [14:27, 19.1.2022] Sebastian Tanz: ## Usage Example
+### 
 
-  ### Requirements
 
-  - namespace routing-service
-  - AWS credentials in routing-dashboard.yaml
-  - configure AWS S3 bucket url in Java code
-  - apply routing-dashboard.yaml
-  - Setup of infrastructure and user accounts
 
-  ## TODO Open questions and next steps
+##  Tutorial
 
-  #### Hiding AWS Credentials from Storage
+#### Setup & Prerequisites
 
-  Currently, the AWS Credentials are added in the application code. In the future, we will be using a Kubernetes Secret to store them so that we do not need to include confidential data in your application code.
+- clone this repo from github 
+  `https://github.com/tuesd4y/cloud-computing-project.git`
+- Make sure you have a connection to your kubernetes cluster, you have a `routing-service` namespace and have configured an `routing-dashboard-admin` as outlined in [Authentication via Service accounts](#authentication-via-service-accounts)
+- update `routing-dashboard/routing-dashboard.yaml` with your AWS S3 API keys
+- deploy the routing dashboard using `kubectl apply -f routing-dashboard/routing-dashboard.yaml`
+- port-forward the routing-dashboard service to your localhost by running `kubectl port-forward service/routing-dashboard -n routing-service 8080:8080`
+- You can now access the routing dashboard at http://localhost:8080
 
-  #### Show Current Scaling & Configure Mem/CPU
+#### Deploying New Service Area
 
-  The parameters for scaling a deployment are set in AutoscalerTemplate, while the allocation of memory and CPU resources is handled in DeploymentTemplate. For now, those are all static values. However, depending on the size of an area, the needed resources can be quite different. Therefore, we will add the possibility of setting these parameters in the UI for each area specifically.
+By clicking on Add New Region a sub-window is opened, which allows to select a specific area the required mode of transport and submit it via Load the REST-Call for pre-processing is sent to the server. 
 
-  ### DNS based on service names + security for outside access
+![addnew](img/addnew.png)
 
-  
+#### Check Newly Added Area in UI
 
-  ##  Tutorial
+Depending on the size of the area, pre-preprocessing it and starting the specific routing server can take up to 24 hours. As soon as the area is ready, it will be shown in the UI under the Active Region Table and on the map.
 
-  #### Setup & Prerequisites
+![activeregions](img/activeregions.png)
 
-  To set up the project you have to download the directory  _routing-dashboard_. To the further sucessfuly run the project AWS Credentials have to be added in ``kotlin/com/tuesd4y/routingdashboard/config/AwsCredentials.kt``
+### Demonstrate autoscaling
 
-  ```kotlin
-  @Component
-  class AwsCredentials(val environment: Environment) {
-      val awsAccessKeyId: String
-          get() = environment.getProperty("AWS_ACCESS_KEY_ID", "")
-      val awsSecretAccessKey: String
-          get() = environment.getProperty("AWS_SECRET_ACCESS_KEY", "")
-  ```
+- Run `kubectl get hpa -n routing-service --watch` in your terminal to see the currently running HorizontalPodAutoscalers
+- In another window, run `kubectl get services  -n routing-service` and choose one of the services for testing autoscaling, note its name
+- Run `kubectl run -i --tty load-generator -n routing-service --rm --image=busybox --restart=Never -- /bin/sh -c "while sleep 0.001; do wget -q -O- 'http://SERVICE:5000/route/v1/driving/13.388860,52.517037;13.385983,52.496891?steps=true'; done"` 
+- You should now see the HorizontalPodAutoscaler scaling up your Deployment, and scale it down once the script in the other window is terminated.
 
-  When loading the gradle project correctly the Spring Boot Configuration should be set automatically. However, if you are running Java 13 it could be that you have to add 
-  ``-Djdk.tls.client.protocols=TLSv1.2`` as additional VM Option.
+## Open questions and Next Steps
 
-  After following the listed steps, there server can be started.
+### Hiding AWS Credentials from Storage
 
-  #### Deploying New Service Area
+Currently, the AWS Credentials are added in the application code. In the future, we will be using  Kubernetes Secrets to store them so that we do not need to include confidential data in our application code or yaml files.
 
-  After starting the server, the UI can be accessed directly through the server's address. 
+### Show Current Scaling & Configure Mem/CPU
 
-  By clicking on Add New Region a sub-window is opened, which allows to select a specific area the required mode of transport and submit it via Load the REST-Call for pre-processing is sent to the server. 
+The parameters for scaling a deployment are set in AutoscalerTemplate, while the allocation of memory and CPU resources is handled in DeploymentTemplate. For now, those are all static values. However, depending on the size of an area, the needed resources can be quite different. Therefore, we will add the possibility of setting these parameters in the UI for each area specifically.
 
-  ![addnew](img/addnew.png)
+### DNS based on service names + security for outside access
 
-  - watch HPA for service
-  - using load-generator to demonstrate scaling
-
-  #### Check Newly Added Area in UI
-
-  Depending on the size of the area, pre-preprocessing it and starting the specific routing server can take up to 24 hours. As soon as the area is ready, it will be shown in the UI under the Active Region Table and on the map.
-
-  ![activeregions](img/activeregions.png)
+In order to access our routing service from the outside world, we want to automatically set up URLs for them so that they can easily be reached and secure them.
