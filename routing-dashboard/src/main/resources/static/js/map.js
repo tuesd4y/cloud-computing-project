@@ -38,7 +38,7 @@ function initMainMap() {
 
 }
 
-function initModalMap(){
+function initModalMap() {
 	//init modal map
 	map_modal = new OpenLayers.Map('map_modal');
 	layer_modal = new OpenLayers.Layer.OSM("",
@@ -73,7 +73,7 @@ function initModalMap(){
 	map_modal.setCenter(new OpenLayers.LonLat(16.373819, 48.208176).transform("EPSG:4326", "EPSG:900913"), 4);
 }
 
-function loadStaticRegionsContent(){
+function loadStaticRegionsContent() {
 	/*$.get("https://download.geofabrik.de/europe.html", function (data) {
 		$(data).find('#subregions').eq(1).find('td.subregion :first-child').each(function () {
 
@@ -121,7 +121,7 @@ $(document).ready(function () {
 			$(result).each(function () {
 				var name = $("#" + this.region.split("-")[0] + "-item").text();
 
-				$(".active-regions").append('<a class="list-group-item list-group-item-action" href="#" identifier="' + this.region + '-' + this.mode + '" data="' + this.shapePath + '" data-mdb-toggle="list" role="tab"><i class="fa-active '+ this.iconClass +'"></i>  ' + name + '</a>');
+				$(".active-regions").append('<a class="list-group-item list-group-item-action" href="#" identifier="' + this.region + '-' + this.mode + '" data="' + this.shapePath + '" data-mdb-toggle="list" role="tab"><i class="fa-active ' + this.iconClass + '"></i>  ' + name + '</a>');
 
 				countryLayer =
 					new OpenLayers.Layer.Vector("KML", {
@@ -217,7 +217,7 @@ $(document).ready(function () {
 		regionToAdd = $(this).attr('data');
 	});
 
-	var modeToAdd;
+	var modeToAdd = "car";
 	$(document).on("click", "#list-modes a", function () {
 		modeToAdd = $(this).attr('data');
 	});
@@ -245,6 +245,12 @@ $(document).ready(function () {
 					message: 'Processing Started: Region was deleted!',
 					type: 'success'
 				});
+			},
+			complete: function (data) {
+				new Toast({
+					message: 'Processing Started: New region will be available within the next 24 hours.',
+					type: 'success'
+				});
 			}
 		});
 	});
@@ -253,25 +259,32 @@ $(document).ready(function () {
 		$.ajax({
 			url: serverUrl + "/startProcessing",
 			type: "POST",
-			contentType : 'application/json',
+			contentType: 'application/json',
 			headers: {
 				"Authorization": "Basic " + "dXNlcjpwYXNzd29yZA=="
 			},
-			data: JSON.stringify({"htmlLink":regionToAdd, "mode":modeToAdd}),
+			data: JSON.stringify({"htmlLink": regionToAdd, "mode": modeToAdd}),
 			success: function (result) {
-					console.log(response);
-					new Toast({
-						message: 'Processing Started: New region will be available within the next 24 hours.',
-						type: 'success'
-					});
+				new Toast({
+					message: 'Processing Started: New region will be available within the next 24 hours.',
+					type: 'success'
+				});
+			},
+			complete: function (data) {
+				new Toast({
+					message: 'Processing Started: New region will be available within the next 24 hours.',
+					type: 'success'
+				});
 			}
 		});
 	});
 
 	$(document).on("click", "#openModal", function () {
 
-		if(modalMapLoaded == 0){
-			setTimeout(function(){ initModalMap() }, 1000);
+		if (modalMapLoaded == 0) {
+			setTimeout(function () {
+				initModalMap()
+			}, 1000);
 			modalMapLoaded = 1;
 		}
 	});
